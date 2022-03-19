@@ -43,8 +43,9 @@ pipeline {
                             }
                         sh """ssh $USER@$PROD_IP sudo docker ps"""
                     }
-         }
-      }
+            }
+
+       }
     }
     post {
 		always {
