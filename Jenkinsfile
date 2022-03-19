@@ -28,10 +28,21 @@ pipeline {
 	     }
        stage('Deploy'){
           steps{
-            script {
-             sh 'echo ${PROD_IP}'
-             sh 'printenv'
-           }          
+            sshagent(['worker-SSH-KEY']) {
+                    script {
+                        sh """ssh $USER@$PROD_IP sudo docker pull $IMAGE:${BUILD_NUMBER}"""
+                        try {
+                            sh """ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${BUILD_NUMBER}"""
+                            }
+                        catch (exc) {
+                             sh """
+                              ssh $USER@$PROD_IP sudo docker stop petclinic
+                              ssh $USER@$PROD_IP sudo docker rm petclinic
+                              ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${BUILD_NUMBER}
+                             """
+                            }
+                        sh """ssh $USER@$PROD_IP sudo docker ps"""
+                    }
          }
       }
     }
