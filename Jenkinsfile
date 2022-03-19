@@ -37,8 +37,8 @@ pipeline {
                             }
                         catch (exc) {
                              sh """
-                              ssh $USER@$PROD_IP sudo docker stop petclinic
-                              ssh $USER@$PROD_IP sudo docker rm petclinic
+                              ssh $USER@$PROD_IP sudo docker stop flask-app
+                              ssh $USER@$PROD_IP sudo docker rm flask-app
                               ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${BUILD_NUMBER}
                              """
                             }
