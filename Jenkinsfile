@@ -16,16 +16,23 @@ pipeline {
                   git branch: 'main', url: 'https://github.com/612284/flask-app.git'
                   sh 'docker build -t $IMAGE:${BUILD_NUMBER} .'
                 }
-	    }
-	}
+	           }
+	      }
         stage('Push to Dockerhub'){
            steps{
              dir('source') {
                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                sh 'docker push $IMAGE:${BUILD_NUMBER}'
              }
-	   }
-	}
+	         }
+	     }
+       stage('Deploy'){
+          steps{
+           dir('source') {
+             sh 'echo ${PROD_IP}'
+           }
+         }
+      }
     }
     post {
 		always {
