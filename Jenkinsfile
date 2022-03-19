@@ -30,6 +30,7 @@ pipeline {
           steps{
            dir('source') {
              sh 'echo ${PROD_IP}'
+             sh 'ping ${PROD_IP}'
            }
          }
       }
