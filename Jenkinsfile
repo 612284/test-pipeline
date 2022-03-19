@@ -30,7 +30,7 @@ pipeline {
            steps{
               sshagent(['worker-SSH-KEY']) {
                     script {
-                        sh  'ssh -o StrictHostKeyChecking=no $USER@$HOST uptime'
+                        sh  'ssh -o StrictHostKeyChecking=no $USER@$PROD_IP uptime'
                         sh """ssh $USER@$PROD_IP sudo docker pull $IMAGE:${BUILD_NUMBER}"""
                         try {
                             sh """ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${BUILD_NUMBER}"""
