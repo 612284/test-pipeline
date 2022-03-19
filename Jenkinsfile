@@ -28,10 +28,10 @@ pipeline {
 	     }
        stage('Deploy'){
           steps{
-           dir('source') {
+            script {
              sh 'echo ${PROD_IP}'
              sh 'printenv'
-           }
+           }          
          }
       }
     }
