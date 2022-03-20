@@ -12,7 +12,7 @@ pipeline {
 	}
 
     stages {
-        stage('Checkout SCM') {
+        stage('Checkout SCM on  GitHub') {
           steps {
             checkout([
               $class: 'GitSCM',
@@ -24,7 +24,7 @@ pipeline {
              ])
            }
         }
-        stage('build') {
+        stage('Build docker image') {
             steps {
                 dir('source') {
                   git branch: 'main', url: 'https://github.com/612284/flask-app.git'
@@ -40,14 +40,14 @@ pipeline {
              }
 	       }
 	    }
-        stage('Deploy'){
+        stage('Deploy to Prod'){
            steps{
-              sshagent(['worker-SSH-KEY']) {
+              sshagent(['SSH-KEY']) {
                     script {
                         sh  'ssh -o StrictHostKeyChecking=no $USER@$PROD_IP uptime'
-                        sh """ssh $USER@$PROD_IP sudo docker pull $IMAGE:${BUILD_NUMBER}"""
+                        sh 'ssh $USER@$PROD_IP sudo docker pull $IMAGE:${BUILD_NUMBER}'
                         try {
-                            sh """ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${BUILD_NUMBER}"""
+                            sh 'ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${BUILD_NUMBER}'
                             }
                         catch (exc) {
                              sh """
@@ -56,7 +56,7 @@ pipeline {
                               ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${BUILD_NUMBER}
                              """
                             }
-                        sh """ssh $USER@$PROD_IP sudo docker ps"""
+                        sh 'ssh $USER@$PROD_IP sudo docker ps'
                     }
               }
            }
