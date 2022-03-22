@@ -36,7 +36,7 @@ pipeline {
                     sh 'git rev-list --count main'
                     echo "GIT_COMMIT_N: ${GIT_COMMIT_N}"
                  }
-                  sh 'docker build -t $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER} .'
+                  sh """docker build -t $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER} ."""
                 }
 	        }
 	    }
@@ -44,7 +44,7 @@ pipeline {
            steps{
              dir('source') {
                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-               sh 'docker push $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER}'
+               sh """docker push $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER}"""
              }
 	       }
 	    }
@@ -53,9 +53,9 @@ pipeline {
               sshagent(['SSH-KEY']) {
                     script {
                         sh  'ssh -o StrictHostKeyChecking=no $USER@$PROD_IP uptime'
-                        sh 'ssh $USER@$PROD_IP sudo docker pull $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER}'
+                        sh """ssh $USER@$PROD_IP sudo docker pull $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER}"""
                         try {
-                            sh 'ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER}'
+                            sh """ssh $USER@$PROD_IP sudo docker run -d -p 80:5000 --name flask-app $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER}"""
                             }
                         catch (exc) {
                              sh """
