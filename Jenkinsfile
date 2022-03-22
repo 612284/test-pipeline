@@ -33,8 +33,7 @@ pipeline {
                       script: 'git rev-list --count main',
                       returnStdout: true
                     ).trim()
-                    sh 'git rev-list --count main'
-                    echo "GIT_COMMIT_N: ${GIT_COMMIT_N}"
+                    sh 'git rev-list --count main'                    
                  }
                   sh """docker build -t $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER} ."""
                 }
