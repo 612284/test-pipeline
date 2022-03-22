@@ -28,6 +28,8 @@ pipeline {
             steps {
                 dir('source') {
                   git branch: 'main', url: 'https://github.com/612284/flask-app.git'
+                  GIT_COMMIT_N = sh 'git rev-list --count main'
+                  echo "GIT_COMMIT_N: $GIT_COMMIT_N"
                   sh 'docker build -t $IMAGE:${BUILD_NUMBER} .'
                 }
 	        }
