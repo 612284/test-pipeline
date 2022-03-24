@@ -16,7 +16,7 @@ pipeline {
               $class: 'GitSCM',
               branches: [[name: 'main']],
               userRemoteConfigs: [[
-                url: '${APP_GIT_HUB_REPO}',
+                url: 'https://github.com/612284/flask-app.git',
                 credentialsId: '',
               ]]
              ])
