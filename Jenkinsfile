@@ -6,8 +6,7 @@ pipeline {
    }
 
     environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerHub-user')		
-		IMAGE='612284/kh-071-01-devops'
+		DOCKERHUB_CREDENTIALS=credentials('dockerHub-user')
 	}
 
     stages {
@@ -17,7 +16,7 @@ pipeline {
               $class: 'GitSCM',
               branches: [[name: 'main']],
               userRemoteConfigs: [[
-                url: 'https://github.com/612284/flask-app.git',
+                url: '$APP_GIT_HUB_REPO',
                 credentialsId: '',
               ]]
              ])
@@ -26,7 +25,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 dir('source') {
-                  git branch: 'main', url: 'https://github.com/612284/flask-app.git'
+                  git branch: 'main', url: '$APP_GIT_HUB_REPO'
                   script {
                     GIT_COMMIT_N = sh (
                       script: 'git rev-list --count main',
