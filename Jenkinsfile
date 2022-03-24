@@ -6,8 +6,7 @@ pipeline {
    }
 
     environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerHub-user')
-		USER='ubuntu'
+		DOCKERHUB_CREDENTIALS=credentials('dockerHub-user')		
 		IMAGE='612284/kh-071-01-devops'
 	}
 
@@ -33,7 +32,7 @@ pipeline {
                       script: 'git rev-list --count main',
                       returnStdout: true
                     ).trim()
-                    sh 'git rev-list --count main'                    
+                    sh 'git rev-list --count main'
                  }
                   sh """docker build -t $IMAGE:${GIT_COMMIT_N}.${BUILD_NUMBER} ."""
                 }
