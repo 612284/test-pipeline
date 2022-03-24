@@ -16,7 +16,7 @@ pipeline {
               $class: 'GitSCM',
               branches: [[name: 'main']],
               userRemoteConfigs: [[
-                url: '$APP_GIT_HUB_REPO',
+                url: '${APP_GIT_HUB_REPO}',
                 credentialsId: '',
               ]]
              ])
@@ -25,7 +25,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 dir('source') {
-                  git branch: 'main', url: '$APP_GIT_HUB_REPO'
+                  git branch: 'main', url: '${APP_GIT_HUB_REPO}'
                   script {
                     GIT_COMMIT_N = sh (
                       script: 'git rev-list --count main',
